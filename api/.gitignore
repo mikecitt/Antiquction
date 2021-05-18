@@ -1,0 +1,24 @@
+#Gradle temporary files
+target/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache/
+
+#Eclipse files
+**/.project
+**/.classpath
+**/.settings/
+blog/bin/
+**/.tern-project
+
+# IDE - VSCode
+.vscode/*
+.vscode/settings.json
+
+.DS_Store
