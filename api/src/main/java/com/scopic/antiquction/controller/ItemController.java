@@ -32,13 +32,13 @@ public class ItemController {
     private ModelMapper modelMapper;
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'REGULAR')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_REGULAR')")
     public ResponseEntity<List<Item>> getItems() {
         return new ResponseEntity<List<Item>>(itemService.findAll(), HttpStatus.OK);
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Item> addItem(@RequestBody ItemDTO itemDTO) {
         Item item = modelMapper.map(itemDTO, Item.class);
         Item i = itemService.add(item);
@@ -46,7 +46,7 @@ public class ItemController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Item> updateItem(@RequestBody ItemDTO itemDTO, @PathVariable Long id) {
         Item item = modelMapper.map(itemDTO, Item.class);
         Item i = itemService.update(id, item);
@@ -56,7 +56,7 @@ public class ItemController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Void> deleteItem(@PathVariable Long id) {
         itemService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

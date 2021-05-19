@@ -37,7 +37,7 @@ public class AccountDetailsService implements UserDetailsService {
     User user = entity.get();
 
     List<GrantedAuthority> authorities = new ArrayList<>();
-    authorities.add(new SimpleGrantedAuthority(user.getUserType() == UserType.ADMIN ? "ADMIN" : "REGULAR"));
+    authorities.add(new SimpleGrantedAuthority("ROLE_" + (user.getUserType() == UserType.ADMIN ? "ADMIN" : "REGULAR")));
 
     return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), true, true, true, true, authorities);
   }

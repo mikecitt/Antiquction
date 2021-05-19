@@ -1,5 +1,6 @@
 package com.scopic.antiquction.controller;
 
+import java.security.Principal;
 import java.util.Optional;
 
 import com.scopic.antiquction.model.Bid;
@@ -28,9 +29,9 @@ public class BidController {
     private UserService userService;
 
     @PostMapping("/{id}")
-    @PreAuthorize("hasRole('USER')")
-    public Item bidItem(@PathVariable Long id) {
-        Optional<User> loggedUser = userService.findUser("user1"); // temporary
+    @PreAuthorize("hasRole('ROLE_REGULAR')")
+    public Item bidItem(@PathVariable Long id, Principal user) {
+        Optional<User> loggedUser = userService.findUser(user.getName());
         Bid bid = new Bid();
         bid.setUser(loggedUser.get());
         return itemService.bid(bid, id);
