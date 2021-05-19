@@ -10,11 +10,6 @@ import javax.validation.constraints.Size;
 
 import lombok.Data;
 
-enum UserType {
-    REGULAR,
-    ADMIN
-}
-
 @Data
 @Entity
 public class User extends Model {
