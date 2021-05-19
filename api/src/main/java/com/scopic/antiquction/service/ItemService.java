@@ -46,16 +46,25 @@ public class ItemService {
         return;
     }
 
-    public Item bid(Bid bid, Long itemId) {
+    public Item bid(Bid bid, Long itemId, Long userId) {
         Item item = repository.getOne(itemId);
         List<Bid> bids = item.getBids();
-        Bid highestBid = bids.get(bids.size() - 1);
-        bid.setBidPrice(highestBid.getBidPrice() + 1);
+
+        Integer currPrice;
+        if(bids.size() > 0) { // if there are some bids
+            Bid highestBid = bids.get(bids.size() - 1);
+            if(highestBid.getUser().getId() == userId)
+                return null;
+            currPrice = highestBid.getBidPrice();
+        }
+        else { // if this is first bid
+            currPrice = item.getStartPrice();
+        }
+
+        if(bid.getBidPrice() <= currPrice) // if bid price is not higher than current price
+            return null;
+
         item.getBids().add(bid);
         return repository.save(item);
     }
-
-    /*public Integer getItemHighestBid(Item item) {
-        item.getBids();
-    }*/
 }

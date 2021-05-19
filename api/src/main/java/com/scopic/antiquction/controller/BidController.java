@@ -10,6 +10,8 @@ import com.scopic.antiquction.service.ItemService;
 import com.scopic.antiquction.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,12 +30,23 @@ public class BidController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/{id}")
+    @PostMapping("/{id}/{bidPrice}")
     @PreAuthorize("hasRole('ROLE_REGULAR')")
-    public Item bidItem(@PathVariable Long id, Principal user) {
+    public ResponseEntity<Item> bidItem(@PathVariable Long id, @PathVariable Integer bidPrice, Principal user) {
         Optional<User> loggedUser = userService.findUser(user.getName());
+        if(loggedUser == null)
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        if(itemService.findOne(id) == null)
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         Bid bid = new Bid();
+        bid.setBidPrice(bidPrice);
         bid.setUser(loggedUser.get());
-        return itemService.bid(bid, id);
+        
+        Item biddedItem = itemService.bid(bid, id, loggedUser.get().getId());
+
+        if(biddedItem == null)
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        
+        return new ResponseEntity<>(biddedItem, HttpStatus.OK);
     }
 }
