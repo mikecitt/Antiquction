@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import com.scopic.antiquction.dto.ItemRequest;
 import com.scopic.antiquction.dto.ItemResponse;
+import com.scopic.antiquction.model.AutoBid;
 import com.scopic.antiquction.model.Bid;
 import com.scopic.antiquction.model.Item;
 import com.scopic.antiquction.model.User;
@@ -101,5 +102,26 @@ public class ItemController {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         
         return new ResponseEntity<>(modelMapper.map(biddedItem, ItemResponse.class), HttpStatus.OK);
+    }
+
+    @PostMapping("/{id}/autobid")
+    @PreAuthorize("hasRole('ROLE_REGULAR')")
+    public ResponseEntity<ItemResponse> autobidItem(@PathVariable Long id, @RequestParam Integer maxBidPrice, Principal user) {
+        Optional<User> loggedUser = userService.findUser(user.getName());
+        if(loggedUser == null)
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        if(itemService.findOne(id) == null)
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        AutoBid autoBid = new AutoBid();
+        autoBid.setMaxBidPrice(maxBidPrice);
+        autoBid.setUser(loggedUser.get());
+        
+        // TODO: submit autobid
+        //Item biddedItem = itemService.bid(bid, id, loggedUser.get().getId());
+
+        //if(biddedItem == null)
+        //    return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        
+        return new ResponseEntity<>(modelMapper.map(null, ItemResponse.class), HttpStatus.OK);
     }
 }

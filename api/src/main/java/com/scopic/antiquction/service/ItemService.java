@@ -3,10 +3,12 @@ package com.scopic.antiquction.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.scopic.antiquction.model.AutoBid;
 import com.scopic.antiquction.model.Bid;
 import com.scopic.antiquction.model.Item;
 import com.scopic.antiquction.repository.ItemRepository;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,6 +21,9 @@ import org.springframework.stereotype.Service;
 public class ItemService {
     @Autowired
     private ItemRepository repository;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     public Page<Item> findAll(String text, Integer pageNo, Integer pageSize, String sortBy, String direction) {
         Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(Direction.fromString(direction), sortBy));
@@ -75,6 +80,28 @@ public class ItemService {
             return null;
 
         item.getBids().add(bid);
+        item = autoBid(item);
+
         return repository.save(item);
+    }
+
+    public Item autoBid(Item item) {
+        boolean bidded = false;
+
+        for(AutoBid a : item.getAutoBids()) {
+            Bid highestBid = item.getBids().get(item.getBids().size() - 1);
+            if(highestBid.getUser().equals(a.getUser()))
+                continue;
+            if(a.getMaxBidPrice() > highestBid.getBidPrice()) {
+                Integer temp = highestBid.getBidPrice();
+                highestBid = new Bid();
+                highestBid.setUser(a.getUser());
+                highestBid.setBidPrice(temp + 1);
+                item.getBids().add(highestBid);
+                bidded = true;
+            }
+        }
+
+        return bidded ? autoBid(item) : item;
     }
 }

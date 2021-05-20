@@ -21,5 +21,5 @@ public class AutoBid {
     private User user;
     
     @NotNull
-    private Integer bidPrice;
+    private Integer maxBidPrice;
 }
