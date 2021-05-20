@@ -1,12 +1,18 @@
 package com.scopic.antiquction.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.scopic.antiquction.model.Bid;
 import com.scopic.antiquction.model.Item;
 import com.scopic.antiquction.repository.ItemRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,8 +20,13 @@ public class ItemService {
     @Autowired
     private ItemRepository repository;
 
-    public List<Item> findAll() {
-        return repository.findAll();
+    public Page<Item> findAll(String text, Integer pageNo, Integer pageSize, String sortBy, String direction) {
+        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(Direction.fromString(direction), sortBy));
+
+        Page<Item> pagedResult = repository.findByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(text, text, paging);
+    
+
+        return pagedResult;
     }
 
     public Item findOne(Long id) {
@@ -27,22 +38,21 @@ public class ItemService {
     }
 
     public Item update(Long id, Item item) {
-        Item i = repository.findById(id).orElseGet(null);
-        
-        if(i == null) 
+        Optional<Item> i = repository.findById(id);
+        if(!i.isPresent())
             return null;
 
-        i.setName(item.getName());
-        i.setDescription(item.getDescription());
-        i.setDateEnd(item.getDateEnd());
+        i.get().setName(item.getName());
+        i.get().setDescription(item.getDescription());
+        i.get().setDateEnd(item.getDateEnd());
 
-        return repository.save(i);
+        return repository.save(i.get());
     }
 
     public void delete(Long id) {
-        Item item = repository.findById(id).orElseGet(null);
-        if(item != null)
-            repository.delete(item);
+        Optional<Item> item = repository.findById(id);
+        if(item.isPresent())
+            repository.delete(item.get());
         return;
     }
 

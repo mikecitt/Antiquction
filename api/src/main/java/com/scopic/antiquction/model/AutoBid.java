@@ -11,7 +11,7 @@ import lombok.Data;
 
 @Data
 @Entity
-public class Bid {
+public class AutoBid {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
