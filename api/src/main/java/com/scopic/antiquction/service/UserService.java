@@ -48,7 +48,7 @@ public class UserService {
     
         String role = authentication.getAuthorities().iterator().next().getAuthority();
         LoginResponse accountLoginResponse = new LoginResponse(token, role.substring(role.indexOf("_") + 1),
-            request.getUsername());
+            request.getUsername(), EXPIRATION_TIME);
     
         return new ResponseEntity<>(accountLoginResponse, HttpStatus.OK);
       }
