@@ -5,7 +5,7 @@ public final class Constants {
     public static final String PROVIDER = "antiquction";
     public static final String SECREY_KEY = "dgfdgqw54";
     public static final String HEADER_NAME = "Authorization";
-    public static final Long EXPIRATION_TIME = 1000L * 60 * 30;
+    public static final Long EXPIRATION_TIME = 1000L * 60 * 60 * 24 * 30; // 30 days
   
     private Constants() {
   

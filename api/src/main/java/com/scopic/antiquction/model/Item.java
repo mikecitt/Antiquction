@@ -41,13 +41,4 @@ public class Item {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AutoBid> autoBids;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
 }

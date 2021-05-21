@@ -6,9 +6,10 @@ import java.util.Optional;
 import com.scopic.antiquction.model.AutoBid;
 import com.scopic.antiquction.model.Bid;
 import com.scopic.antiquction.model.Item;
+import com.scopic.antiquction.model.User;
 import com.scopic.antiquction.repository.ItemRepository;
+import com.scopic.antiquction.repository.UserRepository;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,13 +24,12 @@ public class ItemService {
     private ItemRepository repository;
 
     @Autowired
-    private ModelMapper modelMapper;
+    private UserRepository userRepository;
 
     public Page<Item> findAll(String text, Integer pageNo, Integer pageSize, String sortBy, String direction) {
         Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(Direction.fromString(direction), sortBy));
 
         Page<Item> pagedResult = repository.findByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(text, text, paging);
-    
 
         return pagedResult;
     }
@@ -62,7 +62,10 @@ public class ItemService {
     }
 
     public Item bid(Bid bid, Long itemId, Long userId) {
-        Item item = repository.getOne(itemId);
+        Optional<Item> i = repository.findById(itemId);
+        if(!i.isPresent())
+            return null;
+        Item item = i.get();
         List<Bid> bids = item.getBids();
 
         Integer currPrice;
@@ -80,12 +83,33 @@ public class ItemService {
             return null;
 
         item.getBids().add(bid);
-        item = autoBid(item);
+        item = checkAutoBid(item);
 
         return repository.save(item);
     }
 
-    public Item autoBid(Item item) {
+    public Item addAutoBid(AutoBid autoBid, Long itemId, Long userId) {
+        Optional<Item> i = repository.findById(itemId);
+        if(!i.isPresent())
+            return null;
+        Item item = i.get();
+
+        Optional<User> u = userRepository.findById(itemId);
+        if(!u.isPresent())
+            return null;
+        User user = u.get();
+
+        //item.getAutoBids().stream()
+        //for(AutoBid a : item.getAutoBids()) {
+        //    if(a.getUser() == user) {
+        //        a.setMaxBidPrice(autoBid.getMaxBidPrice());
+        //    }
+        //}
+
+        return null;
+    }
+
+    public Item checkAutoBid(Item item) {
         boolean bidded = false;
 
         for(AutoBid a : item.getAutoBids()) {
@@ -102,6 +126,6 @@ public class ItemService {
             }
         }
 
-        return bidded ? autoBid(item) : item;
+        return bidded ? checkAutoBid(item) : item;
     }
 }
