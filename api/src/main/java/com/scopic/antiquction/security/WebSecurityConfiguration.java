@@ -50,7 +50,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
-        .antMatchers(HttpMethod.POST, "/auth/login").permitAll()
+        .antMatchers(HttpMethod.POST, "/auth/**").permitAll()
         .antMatchers("/h2-console/**").permitAll()
         .anyRequest().authenticated().and()
         .addFilterBefore(new TokenAuthenticationFilter(accountDetailsService), BasicAuthenticationFilter.class).cors()
