@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../service';
 
 @Component({
   selector: 'app-home-page',
@@ -10,14 +9,9 @@ export class HomePageComponent implements OnInit {
 
   authority;
 
-  constructor(private service: AuthService) { }
+  constructor() { }
 
   ngOnInit(): void {
-  }
-
-  onLogout() {
-    this.authority = null;
-    this.service.logout();
   }
 
 }

@@ -1,0 +1,23 @@
+<table *ngIf="itemPage" class="table table-striped">
+    <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">Date End</th>
+      <th scope="col">Price</th>
+      <th *ngIf="isAdmin()" scope="col">Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let item of itemPage.content; index as i">
+      <th scope="row">{{ i + 1 }}</th>
+      <td>{{ item.name }}</td>
+      <td>{{ item.dateEnd }}</td>
+      <td>{{ item.price }} €</td>
+      <td *ngIf="isAdmin()">
+        <i (click)="edit(item.id)" style="font-size:22px; cursor: pointer;" class="fa fa-pencil-alt"></i>&nbsp;
+        <i (click)="remove(item.id)" style="font-size:22px; cursor: pointer;" class="fa fa-trash"></i>
+      </td>
+    </tr>
+    </tbody>
+  </table>

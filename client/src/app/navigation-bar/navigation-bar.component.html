@@ -1,0 +1,23 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light mb-3">
+    <a class="navbar-brand" [routerLink]="'.'">Antiquction</a>
+  
+    <button class="navbar-toggler" type="button" (click)="isMenuCollapsed = !isMenuCollapsed">
+      &#9776;
+    </button>
+  
+    <div [ngbCollapse]="isMenuCollapsed" class="collapse navbar-collapse">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" [routerLink]="'.'" (click)="isMenuCollapsed = true">Home</a>
+        </li>
+        <li *ngIf="!isAdmin()" class="nav-item">
+          <a class="nav-link" [routerLink]="'/403'" (click)="isMenuCollapsed = true">Autobid settings</a>
+        </li>
+      </ul>
+      <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" [routerLink]="'/403'" (click)="onLogout()">Logout</a>
+          </li>
+      </ul>
+    </div>
+  </nav>

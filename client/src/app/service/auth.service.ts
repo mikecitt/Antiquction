@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
+import { ToastrService } from 'ngx-toastr';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { UserService } from './user.service';
@@ -20,6 +21,7 @@ export class AuthService {
     private http:HttpClient,
     private cookieService:CookieService,
     private router: Router,
+    public toastr: ToastrService
   ) {
     this.access_token = cookieService.get(COOKIE_NAME);
     if(!this.access_token) {
@@ -39,13 +41,11 @@ export class AuthService {
 
     return this.http.post(`${environment.api_url}/auth/login`, body)
       .pipe(map((res:any) => {
-        console.log(res);
-        console.log('Login success:' + res['token']);
+        this.toastr.success('Login successful!', 'Success');
         this.access_token = res['token'];
         const dateNow = new Date();
         dateNow.setMinutes(dateNow.getMinutes() + (res['expiresIn'] / 60000));
         this.cookieService.set(COOKIE_NAME, this.access_token, dateNow);
-        console.log(dateNow);
         this.userService.getMyInfo().subscribe(() => {
           this.router.navigate(['/']);
         });

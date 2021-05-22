@@ -12,13 +12,23 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { StorageServiceModule } from 'ngx-webstorage-service';
 import { TokenInterceptor } from './interceptor/token.interceptor';
 import { CookieService } from 'ngx-cookie-service';
+import { NavigationBarComponent } from './navigation-bar/navigation-bar.component';
+import { ItemListComponent } from './item-list/item-list.component';
+import { ItemDetailsComponent } from './item-details/item-details.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
+import { ItemEditComponent } from './item-edit/item-edit.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     HomePageComponent,
-    ForbiddenComponent
+    ForbiddenComponent,
+    NavigationBarComponent,
+    ItemListComponent,
+    ItemDetailsComponent,
+    ItemEditComponent
   ],
   imports: [
     BrowserModule,
@@ -27,6 +37,8 @@ import { CookieService } from 'ngx-cookie-service';
     FormsModule,
     ReactiveFormsModule,
     StorageServiceModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot(),
     NgbModule
   ],
   providers: [
