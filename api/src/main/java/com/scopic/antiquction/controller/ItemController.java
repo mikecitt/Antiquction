@@ -58,6 +58,13 @@ public class ItemController {
         return new ResponseEntity<>(itemsDTO, HttpStatus.OK);
     }
 
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_REGULAR')")
+    public ResponseEntity<ItemResponse> getItem(@PathVariable Long id) {
+        Item item = itemService.findOne(id);
+        return new ResponseEntity<>(modelMapper.map(item, ItemResponse.class), HttpStatus.OK);
+    }
+
     @PostMapping
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<ItemResponse> addItem(@RequestBody ItemRequest itemDTO) {

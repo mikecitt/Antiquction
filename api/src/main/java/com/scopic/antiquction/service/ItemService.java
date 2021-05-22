@@ -49,7 +49,6 @@ public class ItemService {
 
         i.get().setName(item.getName());
         i.get().setDescription(item.getDescription());
-        i.get().setDateEnd(item.getDateEnd());
 
         return repository.save(i.get());
     }

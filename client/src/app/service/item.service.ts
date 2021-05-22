@@ -10,10 +10,18 @@ export class ItemService {
   constructor(private http: HttpClient) { }
 
   getItems() {
-    return this.http.get<any[]>(`${environment.api_url}/items`)
+    return this.http.get<any[]>(`${environment.api_url}/items/`)
   }
 
-  removeItem(id) {
-    return this.http.delete<any[]>(`${environment.api_url}/items/${id}`)
+  getItem(id: number) {
+    return this.http.get<any[]>(`${environment.api_url}/items/${id}/`)
+  }
+
+  removeItem(id: number) {
+    return this.http.delete<any[]>(`${environment.api_url}/items/${id}/`)
+  }
+
+  updateItem(id: number, payload) {
+    return this.http.put(`${environment.api_url}/items/${id}`, payload);
   }
 }
