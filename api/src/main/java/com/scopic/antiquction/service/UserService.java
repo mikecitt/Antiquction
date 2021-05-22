@@ -13,8 +13,6 @@ import com.scopic.antiquction.model.User;
 import com.scopic.antiquction.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -36,7 +34,7 @@ public class UserService {
         return repository.findUserByUsername(username);
     }
 
-    public ResponseEntity<LoginResponse> login(LoginRequest request) {
+    public LoginResponse login(LoginRequest request) {
         Authentication authentication = authenticationManager
             .authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
     
@@ -50,6 +48,6 @@ public class UserService {
         LoginResponse accountLoginResponse = new LoginResponse(token, role.substring(role.indexOf("_") + 1),
             request.getUsername(), EXPIRATION_TIME);
     
-        return new ResponseEntity<>(accountLoginResponse, HttpStatus.OK);
+        return accountLoginResponse;
       }
 }

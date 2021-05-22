@@ -12,6 +12,7 @@ import com.scopic.antiquction.model.User;
 import com.scopic.antiquction.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,7 +31,7 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody @Valid LoginRequest request) {
-    return userService.login(request);
+    return new ResponseEntity<>(userService.login(request), HttpStatus.OK);
     }
 
     @GetMapping("/whoami")

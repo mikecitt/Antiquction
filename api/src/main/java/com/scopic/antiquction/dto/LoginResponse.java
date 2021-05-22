@@ -6,13 +6,13 @@ import lombok.Data;
 public class LoginResponse {
     private String token;
     private String role;
-    private String email;
+    private String username;
     private Long expiresIn;
 
-    public LoginResponse(String token, String role, String email, Long expiresIn) {
+    public LoginResponse(String token, String role, String username, Long expiresIn) {
         this.token = token;
         this.expiresIn = expiresIn;
         this.role = role;
-        this.email = email;
+        this.username = username;
     }
 }

@@ -17,7 +17,7 @@ export class UserService {
     this.currentUser = this.storage.get(STORAGE_KEY);
   }
 
-  setupUser(user: Object | null) {
+  setupUser(user) {
     this.currentUser = user;
     this.storage.set(STORAGE_KEY, this.currentUser);
   }

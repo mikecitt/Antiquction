@@ -15,15 +15,12 @@ export class LoggedGuard implements CanActivate {
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     if (this.userService.currentUser) {
       let authorities = JSON.stringify(this.userService.currentUser.authorities);
-      if (authorities.search('ROLE_REGULAR') !== -1) {
+      if (authorities.search('ROLE_REGULAR') !== -1 || authorities.search('ROLE_ADMIN') !== -1) {
         return true;
-      } else if (authorities.search('ROLE_ADMIN') !== -1) {
-        return true;
-      } else {
-        this.router.navigate(['/login']);
-        return false;
       }
     }
+    this.router.navigateByUrl('/login');
+    return false;
   }
   
 }
