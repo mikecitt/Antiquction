@@ -1,1 +1,47 @@
-<p>item-details works!</p>
+<div class="modal-content" [class.close-animation]="close">
+    <div class="modal-header">
+        <h5 class="modal-title">Item bidding</h5>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-5">
+                <p><strong>Item:</strong> {{ item.name }}</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-5">
+                <p><strong>Description:</strong> {{ item.description }}</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-5">
+                <p><strong>Ending:</strong> {{ item.dateEnd | timeLeft }}</p>
+            </div>
+        </div>
+        <form formGroup="bidForm" ngSubmit="onBid()">
+            <div class="form-group row">
+                <div class="col-4">
+                    <input type="number" min="1" class="form-control" [formControl]="bidPrice">
+                </div>
+                <button type="button" [disabled]="!bidAllowed" (click)="onBid()" class="btn btn-primary mb-2">Bid</button>
+            </div>
+          </form>
+        <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">User</th>
+                <th scope="col">Price</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of item.bids.slice().reverse(); index as i">
+                <td>{{ item.userUsername }}</td>
+                <td>{{ item.bidPrice }} €</td>
+              </tr>
+            </tbody>
+          </table>
+    </div>
+    <div class="modal-footer">
+        <button type="button" ngbAutofocus class="btn btn-outline-secondary" (click)="closeDialog()">Close</button>
+    </div>
+</div>

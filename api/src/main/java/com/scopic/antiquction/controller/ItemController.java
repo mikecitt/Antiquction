@@ -54,6 +54,10 @@ public class ItemController {
     ) {
         Page<Item> items = itemService.findAll(text, pageNo, pageSize, sortBy, direction);
         Page<ItemResponse> itemsDTO = items.map(item -> modelMapper.map(item, ItemResponse.class));
+        for(ItemResponse itemResponse : itemsDTO.getContent()) {
+            if(itemResponse.getBids().size() > 0)
+                itemResponse.setPrice(itemResponse.getBids().get(itemResponse.getBids().size() - 1).getBidPrice());
+        }
 
         return new ResponseEntity<>(itemsDTO, HttpStatus.OK);
     }
@@ -62,7 +66,10 @@ public class ItemController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_REGULAR')")
     public ResponseEntity<ItemResponse> getItem(@PathVariable Long id) {
         Item item = itemService.findOne(id);
-        return new ResponseEntity<>(modelMapper.map(item, ItemResponse.class), HttpStatus.OK);
+        ItemResponse itemResponse = modelMapper.map(item, ItemResponse.class);
+        if(itemResponse.getBids().size() > 0)
+            itemResponse.setPrice(itemResponse.getBids().get(itemResponse.getBids().size() - 1).getBidPrice());
+        return new ResponseEntity<>(itemResponse, HttpStatus.OK);
     }
 
     @PostMapping

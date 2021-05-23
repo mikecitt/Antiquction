@@ -21,6 +21,6 @@
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-outline-secondary" (click)="closeDialog()">Cancel</button>
-        <button type="button" ngbAutofocus class="btn btn-primary" (click)="updateItem()">Update</button>
+        <button [disabled]="editForm.invalid" type="button" ngbAutofocus class="btn btn-primary" (click)="updateItem()">Update</button>
     </div>
 </div>

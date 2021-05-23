@@ -15,6 +15,8 @@ public class ItemResponse {
 
     private String description;
     
+    private Integer startPrice;
+
     private Integer price;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")

@@ -14,7 +14,7 @@ export class ItemEditComponent implements OnInit {
   public id;
 
   editForm = this.fb.group({
-    name: ['', Validators.compose([Validators.required])],
+    name: ['', Validators.compose([Validators.required, Validators.minLength(5)])],
     description: ['', Validators.compose([Validators.required])]
   });
 

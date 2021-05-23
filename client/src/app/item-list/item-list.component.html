@@ -1,23 +1,43 @@
+<div class="form-group form-inline">
+  <div class="col-2">Filter text</div> <input class="form-control ml-2" type="text" [formControl]="filter"/>
+  <div class="col-2">Sort by</div>
+  <select class="form-control" [formControl]="sortBy">
+    <option value="name ASC">Name Ascending</option>
+    <option value="name DESC">Name Descending</option>
+    <option value="price ASC">Price Ascending</option>
+    <option value="price DESC">Price Descending</option>
+    <option value="dateEnd ASC">Ending Ascending</option>
+    <option value="dateEnd DESC">Ending Descending</option>
+  </select>
+</div>
 <table *ngIf="itemPage" class="table table-striped">
-    <thead>
+  <thead>
     <tr>
-      <th scope="col">#</th>
       <th scope="col">Name</th>
-      <th scope="col">Date End</th>
+      <th scope="col">Ending</th>
       <th scope="col">Price</th>
-      <th *ngIf="isAdmin()" scope="col">Action</th>
+      <th scope="col">Action</th>
     </tr>
-    </thead>
-    <tbody>
+  </thead>
+  <tbody>
     <tr *ngFor="let item of itemPage.content; index as i">
-      <th scope="row">{{ i + 1 }}</th>
-      <td>{{ item.name }}</td>
-      <td>{{ item.dateEnd }}</td>
+      <th>{{ item.name }}</th>
+      <td>{{ item.dateEnd | timeLeft }}</td>
       <td>{{ item.price }} €</td>
-      <td *ngIf="isAdmin()">
-        <i (click)="edit(item.id)" style="font-size:22px; cursor: pointer;" class="fa fa-pencil-alt"></i>&nbsp;
-        <i (click)="remove(item.id)" style="font-size:22px; cursor: pointer;" class="fa fa-trash"></i>
+      <td>
+        <i *ngIf="isAdmin()" (click)="bid(item.id)" style="font-size:22px; cursor: pointer;" class="fa fa-gavel" placement="top" ngbTooltip="Bid"></i>&nbsp;
+        <i *ngIf="isAdmin()" (click)="edit(item.id)" style="font-size:22px; cursor: pointer;" class="fa fa-pencil-alt" placement="top" ngbTooltip="Edit"></i>&nbsp;
+        <i *ngIf="isAdmin()" (click)="remove(item.id)" style="font-size:22px; cursor: pointer;" class="fa fa-trash" placement="top" ngbTooltip="Remove"></i>
+        <button *ngIf="!isAdmin()" type="button" class="btn btn-outline-secondary" (click)="bid(item.id)">Bid Now</button>
       </td>
     </tr>
-    </tbody>
-  </table>
+  </tbody>
+</table>
+<app-pagination-bar class="centered" [hasPrev]="!itemPage.first" [hasNext]="!itemPage.last"
+[currentPage]="currentPage" (navigatePrevEvent)="getPreviousPage()" (navigateNextEvent)="getNextPage()">
+</app-pagination-bar>
+<div *ngIf="isAdmin()" class="btn-group btn-group-toggle">
+  <label class="btn-primary" ngbButtonLabel>
+    <input type="checkbox" (click)="add()" ngbButton > Add new
+  </label>
+</div>

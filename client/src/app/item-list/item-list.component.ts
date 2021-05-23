@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
+import { ItemAddComponent } from '../item-add/item-add.component';
+import { ItemDetailsComponent } from '../item-details/item-details.component';
 import { ItemEditComponent } from '../item-edit/item-edit.component';
 import { ItemService, UserService } from '../service';
 
@@ -30,6 +32,7 @@ export class ItemListComponent implements OnInit {
   public currentPage: number;
 
   filter = new FormControl('');
+  sortBy = new FormControl('name ASC');
 
   constructor(
       private itemService: ItemService, 
@@ -38,6 +41,18 @@ export class ItemListComponent implements OnInit {
       private modalService: NgbModal
     ) {
     this.currentPage = 0;
+
+      this.filter.valueChanges.subscribe(val => {
+        this.itemService.getItems(val, this.currentPage,  this.sortBy.value.split(" ")[0], this.sortBy.value.split(" ")[1]).subscribe(data => {
+          this.itemPage = data;        
+        })
+      });
+
+      this.sortBy.valueChanges.subscribe(val => {
+        this.itemService.getItems(this.filter.value, this.currentPage,  val.split(" ")[0], val.split(" ")[1]).subscribe(data => {
+          this.itemPage = data;        
+        })
+      });
   }
 
   ngOnInit(): void {
@@ -45,8 +60,7 @@ export class ItemListComponent implements OnInit {
   }
 
   loadItems(): void {
-    this.filter.setValue('');
-    this.itemService.getItems().subscribe(data => {
+    this.itemService.getItems(this.filter.value, this.currentPage,  this.filter.value.split(" ")[0], this.filter.value.split(" ")[1]).subscribe(data => {
       this.itemPage = data;        
     })
   }
@@ -61,13 +75,18 @@ export class ItemListComponent implements OnInit {
     this.loadItems();
   }
 
-  openDialog(): void {
-  
-  }
-
   edit(id): void {
     const modalRef = this.modalService.open(ItemEditComponent);
     modalRef.componentInstance.id = id;
+
+    modalRef.result.then((data) => {
+    }, (reason) => {
+      this.loadItems();
+    });
+  }
+
+  add(): void {
+    const modalRef = this.modalService.open(ItemAddComponent);
 
     modalRef.result.then((data) => {
     }, (reason) => {
@@ -82,6 +101,15 @@ export class ItemListComponent implements OnInit {
     },
     err => {
       this.toastr.error('There is a problem with removing item.', 'Error')
+    });
+  }
+
+  bid(id) {
+    const modalRef = this.modalService.open(ItemDetailsComponent, { size: 'lg' });
+    modalRef.componentInstance.id = id;
+    modalRef.result.then((data) => {
+    }, (reason) => {
+      this.loadItems();
     });
   }
 

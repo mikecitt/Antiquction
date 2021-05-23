@@ -18,6 +18,9 @@ import { ItemDetailsComponent } from './item-details/item-details.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { ItemEditComponent } from './item-edit/item-edit.component';
+import { ItemAddComponent } from './item-add/item-add.component';
+import { TimeLeftPipe } from './pipes/time-left.pipe';
+import { PaginationBarComponent } from './pagination-bar/pagination-bar.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +31,10 @@ import { ItemEditComponent } from './item-edit/item-edit.component';
     NavigationBarComponent,
     ItemListComponent,
     ItemDetailsComponent,
-    ItemEditComponent
+    ItemEditComponent,
+    ItemAddComponent,
+    TimeLeftPipe,
+    PaginationBarComponent
   ],
   imports: [
     BrowserModule,

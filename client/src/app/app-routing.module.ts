@@ -6,9 +6,7 @@ import { HomePageComponent } from './home-page/home-page.component';
 import { LoginComponent } from './login/login.component';
 
 const routes: Routes = [
-  {
-    path: '', component: HomePageComponent, canActivate: [LoggedGuard], 
-  },
+  { path: '', component: HomePageComponent, canActivate: [LoggedGuard] },
   { path: 'login', component: LoginComponent, canActivate: [LoginGuard] },
   { path: '403', component: ForbiddenComponent }
 ];
