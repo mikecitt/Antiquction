@@ -15,7 +15,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -26,8 +25,15 @@ public class ItemService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private EmailService emailService;
+
     public Page<Item> findAll(String text, Integer pageNo, Integer pageSize, String sortBy, String direction) {
-        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(Direction.fromString(direction), sortBy));
+        Pageable paging;
+        if(direction.equals("ASC"))
+            paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy).ascending().and(Sort.by("id")));
+        else
+            paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy).descending().and(Sort.by("id")));
 
         Page<Item> pagedResult = repository.findByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(text, text, paging);
 
@@ -93,32 +99,80 @@ public class ItemService {
             return null;
         Item item = i.get();
 
-        Optional<User> u = userRepository.findById(itemId);
+        Optional<User> u = userRepository.findById(userId);
         if(!u.isPresent())
             return null;
         User user = u.get();
 
-        //item.getAutoBids().stream()
-        //for(AutoBid a : item.getAutoBids()) {
-        //    if(a.getUser() == user) {
-        //        a.setMaxBidPrice(autoBid.getMaxBidPrice());
-        //    }
-        //}
+        boolean done = false;
 
+        for(AutoBid a : item.getAutoBids()) {
+            if(a.getUser() == user) {
+                a.setMaxBidPrice(autoBid.getMaxBidPrice());
+                done = true;
+            }
+        }
+
+        if(!done)
+            item.getAutoBids().add(autoBid);
+            
+        item = checkAutoBid(item);
+        return repository.save(item);
+    }
+
+    private AutoBid reserveUser(AutoBid a, Item i, Integer price) {
+        Integer lastReserved = a.getUser().getReservedAutoBid();
+        Integer notificationAutoBid = a.getUser().getNotificationAutoBid();
+        Integer maxAutoBid = a.getUser().getMaxAutoBid();
+        Integer lastBid = 0;
+        for(Bid b : i.getBids()) {
+            if(b.getUser() == a.getUser())
+                lastBid = b.getBidPrice();
+        }
+        Integer diff = price - lastBid;
+
+        if(maxAutoBid == null)
+            return a;
+        if(lastReserved + diff <= maxAutoBid) {
+            a.getUser().setReservedAutoBid(lastReserved + diff);
+            if(notificationAutoBid != null) {
+                if( (float) lastReserved / (float) maxAutoBid < (float) notificationAutoBid / 100 && ((float) lastReserved + (float) diff) / (float) maxAutoBid >= (float) notificationAutoBid / 100) {
+                    emailService.sendMessage("antiquction.notification@gmail.com", "Antiquction AutoBid", "You have reached " + notificationAutoBid + "% of maximum bidding ammount.");
+                }
+            }
+            return a;
+        }
+        emailService.sendMessage("antiquction.notification@gmail.com", "Antiquction AutoBid", "Your bidding process is stopped. Reached maximum ammount.");
         return null;
     }
 
     public Item checkAutoBid(Item item) {
         boolean bidded = false;
+        AutoBid b = new AutoBid();
+
+        Bid highestBid;
 
         for(AutoBid a : item.getAutoBids()) {
-            Bid highestBid = item.getBids().get(item.getBids().size() - 1);
+            if(item.getBids().size() == 0 && a.getMaxBidPrice() > item.getStartPrice()) {
+                highestBid = new Bid();
+                highestBid.setBidPrice(item.getStartPrice()+1);
+                b = reserveUser(a, item, item.getStartPrice()+1);
+                if(b == null)
+                    return item;
+                highestBid.setUser(b.getUser());
+                item.getBids().add(highestBid);
+                return item;
+            }
+            highestBid = item.getBids().get(item.getBids().size() - 1);
             if(highestBid.getUser().equals(a.getUser()))
                 continue;
             if(a.getMaxBidPrice() > highestBid.getBidPrice()) {
+                b = reserveUser(a, item, highestBid.getBidPrice()+1);
+                if(b == null)
+                    continue;
                 Integer temp = highestBid.getBidPrice();
                 highestBid = new Bid();
-                highestBid.setUser(a.getUser());
+                highestBid.setUser(b.getUser());
                 highestBid.setBidPrice(temp + 1);
                 item.getBids().add(highestBid);
                 bidded = true;

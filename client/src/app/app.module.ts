@@ -21,6 +21,7 @@ import { ItemEditComponent } from './item-edit/item-edit.component';
 import { ItemAddComponent } from './item-add/item-add.component';
 import { TimeLeftPipe } from './pipes/time-left.pipe';
 import { PaginationBarComponent } from './pagination-bar/pagination-bar.component';
+import { AutobidSettingsComponent } from './autobid-settings/autobid-settings.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { PaginationBarComponent } from './pagination-bar/pagination-bar.componen
     ItemEditComponent,
     ItemAddComponent,
     TimeLeftPipe,
-    PaginationBarComponent
+    PaginationBarComponent,
+    AutobidSettingsComponent
   ],
   imports: [
     BrowserModule,

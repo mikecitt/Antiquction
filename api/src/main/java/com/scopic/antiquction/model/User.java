@@ -39,6 +39,10 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private UserType userType;
 
+    private Integer maxAutoBid;
+    private Integer reservedAutoBid;
+    private Integer notificationAutoBid;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<Authority> authorityList = new ArrayList<>();

@@ -9,6 +9,7 @@ class Item {
   description: string;
   dateEnd: string;
   price: string;
+  autoBid: string;
   bids: Bid[];
 }
 
@@ -33,6 +34,7 @@ export class ItemDetailsComponent implements OnInit {
   close = false;
 
   bidPrice = new FormControl('');
+  autoBidPrice = new FormControl('');
 
   constructor(
     private itemService: ItemService,
@@ -52,11 +54,15 @@ export class ItemDetailsComponent implements OnInit {
       this.item.description = result['description'];
       this.item.dateEnd = result['dateEnd'];
       this.item.price = result['price'];
+      this.item.autoBid = result['autoBid'];
       this.item.bids = result['bids'];
       this.bidPrice.setValue(result['price'] + 1);
+      this.autoBidPrice.setValue(result['autoBid']);
       if (this.item.bids[this.item.bids.length - 1].userUsername == this.userService.currentUser.username) {
         this.bidAllowed = false;    
       }
+      console.log(result);
+      console.log(this.item);
   	})
   }
 
@@ -70,8 +76,23 @@ export class ItemDetailsComponent implements OnInit {
     });
   }
 
+  onAutoBid() {
+    this.itemService.autoBidItem(this.id, this.autoBidPrice.value).subscribe(data => {
+      this.toastr.success('AutoBid successfuly added!', 'Success');
+      this.initItem();
+      this.autoBidPrice.setValue("");
+    }, err => {
+      this.toastr.error('Problem with autobidding.', 'Error');
+    });
+  }
+
   closeDialog() {
   	this.close = true;
   	this.modal.dismiss('cancel click');
+  }
+
+  isAdmin() {
+    let authority = this.userService.getRole();
+    return authority === 'ROLE_ADMIN';
   }
 }

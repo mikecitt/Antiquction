@@ -7,6 +7,7 @@ import static com.scopic.antiquction.security.jwt.Constants.SECREY_KEY;
 import java.util.Date;
 import java.util.Optional;
 
+import com.scopic.antiquction.dto.AutobidSettingsDTO;
 import com.scopic.antiquction.dto.LoginRequest;
 import com.scopic.antiquction.dto.LoginResponse;
 import com.scopic.antiquction.model.User;
@@ -32,6 +33,14 @@ public class UserService {
 
     public Optional<User> findUser(String username) {
         return repository.findUserByUsername(username);
+    }
+
+    public Void setupAutoBid(AutobidSettingsDTO settings, Long userId) {
+        User u = repository.getOne(userId);
+        u.setMaxAutoBid(settings.getMaxAutoBid());
+        u.setNotificationAutoBid(settings.getNotificationAutoBid());
+        repository.save(u);
+        return null;
     }
 
     public LoginResponse login(LoginRequest request) {

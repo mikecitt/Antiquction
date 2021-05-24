@@ -23,4 +23,6 @@ public class ItemResponse {
     private Date dateEnd;
 
     private List<BidResponse> bids;
+
+    private Integer autoBid;
 }

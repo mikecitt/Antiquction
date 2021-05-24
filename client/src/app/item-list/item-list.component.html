@@ -25,7 +25,7 @@
       <td>{{ item.dateEnd | timeLeft }}</td>
       <td>{{ item.price }} €</td>
       <td>
-        <i *ngIf="isAdmin()" (click)="bid(item.id)" style="font-size:22px; cursor: pointer;" class="fa fa-gavel" placement="top" ngbTooltip="Bid"></i>&nbsp;
+        <i *ngIf="isAdmin()" (click)="bid(item.id)" style="font-size:22px; cursor: pointer;" class="fa fa-info-circle" placement="top" ngbTooltip="Details"></i>&nbsp;
         <i *ngIf="isAdmin()" (click)="edit(item.id)" style="font-size:22px; cursor: pointer;" class="fa fa-pencil-alt" placement="top" ngbTooltip="Edit"></i>&nbsp;
         <i *ngIf="isAdmin()" (click)="remove(item.id)" style="font-size:22px; cursor: pointer;" class="fa fa-trash" placement="top" ngbTooltip="Remove"></i>
         <button *ngIf="!isAdmin()" type="button" class="btn btn-outline-secondary" (click)="bid(item.id)">Bid Now</button>

@@ -18,12 +18,16 @@
                 <p><strong>Ending:</strong> {{ item.dateEnd | timeLeft }}</p>
             </div>
         </div>
-        <form formGroup="bidForm" ngSubmit="onBid()">
+        <form *ngIf="!isAdmin()">
             <div class="form-group row">
-                <div class="col-4">
-                    <input type="number" min="1" class="form-control" [formControl]="bidPrice">
+                <div class="col-3">
+                    <input type="number" min="{{item.price + 1}}" class="form-control" [formControl]="bidPrice">
                 </div>
-                <button type="button" [disabled]="!bidAllowed" (click)="onBid()" class="btn btn-primary mb-2">Bid</button>
+                <button type="button" [disabled]="!bidAllowed" (click)="onBid()" class="btn btn-primary mb-2">Submit Bid</button>
+                <div class="col-3">
+                    <input type="number" min="{{item.price + 1}}" class="form-control" [formControl]="autoBidPrice">
+                </div>
+                <button type="button" (click)="onAutoBid()" class="btn btn-primary mb-2">AutoBid</button>
             </div>
           </form>
         <table class="table table-striped">

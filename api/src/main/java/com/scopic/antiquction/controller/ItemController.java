@@ -64,11 +64,19 @@ public class ItemController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_REGULAR')")
-    public ResponseEntity<ItemResponse> getItem(@PathVariable Long id) {
+    public ResponseEntity<ItemResponse> getItem(@PathVariable Long id, Principal user) {
+        Optional<User> loggedUser = userService.findUser(user.getName());
+        if(loggedUser == null)
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         Item item = itemService.findOne(id);
         ItemResponse itemResponse = modelMapper.map(item, ItemResponse.class);
         if(itemResponse.getBids().size() > 0)
             itemResponse.setPrice(itemResponse.getBids().get(itemResponse.getBids().size() - 1).getBidPrice());
+        
+        for(AutoBid a : item.getAutoBids())
+            if(a.getUser() == loggedUser.get()) {
+                itemResponse.setAutoBid(a.getMaxBidPrice());
+            }
         return new ResponseEntity<>(itemResponse, HttpStatus.OK);
     }
 
@@ -129,13 +137,9 @@ public class ItemController {
         AutoBid autoBid = new AutoBid();
         autoBid.setMaxBidPrice(maxBidPrice);
         autoBid.setUser(loggedUser.get());
-        
-        // TODO: submit autobid
-        //Item biddedItem = itemService.bid(bid, id, loggedUser.get().getId());
 
-        //if(biddedItem == null)
-        //    return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        Item i = this.itemService.addAutoBid(autoBid, id, loggedUser.get().getId());
         
-        return new ResponseEntity<>(modelMapper.map(null, ItemResponse.class), HttpStatus.OK);
+        return new ResponseEntity<>(modelMapper.map(i, ItemResponse.class), HttpStatus.OK);
     }
 }

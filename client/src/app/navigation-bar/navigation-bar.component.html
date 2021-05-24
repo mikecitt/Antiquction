@@ -1,23 +1,30 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light mb-3">
-    <a class="navbar-brand" [routerLink]="'.'">Antiquction</a>
-  
-    <button class="navbar-toggler" type="button" (click)="isMenuCollapsed = !isMenuCollapsed">
-      &#9776;
-    </button>
-  
-    <div [ngbCollapse]="isMenuCollapsed" class="collapse navbar-collapse">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
-          <a class="nav-link" [routerLink]="'.'" (click)="isMenuCollapsed = true">Home</a>
-        </li>
-        <li *ngIf="!isAdmin()" class="nav-item">
-          <a class="nav-link" [routerLink]="'/403'" (click)="isMenuCollapsed = true">Autobid settings</a>
-        </li>
-      </ul>
-      <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link" [routerLink]="'/403'" (click)="onLogout()">Logout</a>
-          </li>
-      </ul>
-    </div>
-  </nav>
+  <a class="navbar-brand" [routerLink]="'.'">Antiquction</a>
+
+  <button class="navbar-toggler" type="button" (click)="isMenuCollapsed = !isMenuCollapsed">
+    &#9776;
+  </button>
+
+  <div [ngbCollapse]="isMenuCollapsed" class="collapse navbar-collapse">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" [routerLink]="'.'" (click)="isMenuCollapsed = true">Home</a>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <li class="nav-item" ngbDropdown display="dynamic" placement="bottom-right">
+        <a class="nav-link" style="cursor: pointer" ngbDropdownToggle id="dropdownConfig" role="button">
+          {{getUsername()}}
+        </a>
+        <div ngbDropdownMenu aria-labelledby="dropdownConfig" class="dropdown-menu">
+      <li *ngIf="!isAdmin()" class="nav-item">
+        <a class="nav-link" [routerLink]="'.'" (click)="onAutobidSettings()">Autobid settings</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="'/403'" (click)="onLogout()">Logout</a>
+      </li>
+  </div>
+  </li>
+  </ul>
+  </div>
+</nav>

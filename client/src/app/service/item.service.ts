@@ -36,4 +36,8 @@ export class ItemService {
   bidItem(id: number, bidPrice: number) {
   	return this.http.post<any>(`${environment.api_url}/items/${id}/bid?bidPrice=${bidPrice}`, httpOptions)
   }
+
+  autoBidItem(id: number, autoBidPrice: number) {
+  	return this.http.post<any>(`${environment.api_url}/items/${id}/autobid?maxBidPrice=${autoBidPrice}`, httpOptions)
+  }
 }
