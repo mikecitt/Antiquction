@@ -29,6 +29,7 @@ export class ItemDetailsComponent implements OnInit {
   public id;
 
   bidAllowed = true;
+  autoBidAllowed = true;
 
   item: Item;
 
@@ -65,7 +66,12 @@ export class ItemDetailsComponent implements OnInit {
         if (this.item.bids[this.item.bids.length - 1].userUsername == this.userService.currentUser.username) {
           this.bidAllowed = false;    
         }
-  	})
+      var diff = Math.floor(+new Date(result['dateEnd']) - +new Date());
+      if(diff < 0) {
+        this.bidAllowed = false;
+        this.autoBidAllowed = false;
+      }
+    })
   }
 
   onBid() {

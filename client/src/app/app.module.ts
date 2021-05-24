@@ -5,7 +5,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { HomePageComponent } from './home-page/home-page.component';
-import { ForbiddenComponent } from './forbidden/forbidden.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -28,7 +27,6 @@ import { AutobidSettingsComponent } from './autobid-settings/autobid-settings.co
     AppComponent,
     LoginComponent,
     HomePageComponent,
-    ForbiddenComponent,
     NavigationBarComponent,
     ItemListComponent,
     ItemDetailsComponent,

@@ -1,5 +1,6 @@
 package com.scopic.antiquction.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,12 +32,7 @@ public class ItemService {
     public Page<Item> findAll(String text, Integer pageNo, Integer pageSize, String sortBy, String direction) {
         Pageable paging;
         paging = PageRequest.of(pageNo, pageSize, Sort.by(new Sort.Order(Sort.Direction.fromString(direction), sortBy).ignoreCase()).and(Sort.by("id")));
-        /*
-        if(direction.equals("ASC"))
-            paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy).ascending().and(Sort.by("id")));
-        else
-            paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy).descending().and(Sort.by("id")));
-        */
+
         Page<Item> pagedResult = repository.findByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(text, text, paging);
 
         return pagedResult;
@@ -73,6 +69,8 @@ public class ItemService {
         if(!i.isPresent())
             return null;
         Item item = i.get();
+        if(item.getDateEnd().before(new Date()))
+            return null;
         List<Bid> bids = item.getBids();
 
         Integer currPrice;

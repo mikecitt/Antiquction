@@ -1,6 +1,9 @@
 <div class="modal-content" [class.close-animation]="close">
     <div class="modal-header">
         <h5 class="modal-title">Item bidding</h5>
+        <button type="button" class="close" aria-label="Close" (click)="closeDialog()">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
     <div class="modal-body">
         <div class="row">
@@ -9,46 +12,52 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-5">
+            <div class="col-7">
                 <p><strong>Description:</strong> {{ item.description }}</p>
             </div>
         </div>
         <div class="row">
-            <div class="col-5">
+            <div class="col-7">
                 <p><strong>Start price:</strong> {{ item.startPrice }} € </p>
             </div>
         </div>
         <div class="row">
-            <div class="col-5">
+            <div class="col-7">
                 <p><strong>Ending:</strong> {{ item.dateEnd | timeLeft }}</p>
             </div>
         </div>
         <form *ngIf="!isAdmin()">
-            <div class="form-group row">
-                <div class="col-3">
-                    <input type="number" min="{{item.price + 1}}" class="form-control" [formControl]="bidPrice">
+            <div class="form-row">
+                <div class="col-md-2 mb-2">
+                    <input type="number" [readonly]="!bidAllowed" min="{{item.price + 1}}" class="form-control" [formControl]="bidPrice">
                 </div>
-                <button type="button" [disabled]="!bidAllowed" (click)="onBid()" class="btn btn-primary mb-2">Submit Bid</button>
-                <div class="col-3">
-                    <input type="number" min="{{item.price + 1}}" class="form-control" [formControl]="autoBidPrice">
+                <div class="col-md-3 mb-2">
+                    <button type="button" [disabled]="!bidAllowed" (click)="onBid()" class="btn btn-primary mb-2">Submit
+                        Bid</button>
                 </div>
-                <button type="button" (click)="onAutoBid()" class="btn btn-primary mb-2">AutoBid</button>
+                <div class="col-md-2 mb-2">
+                    <input type="number" [readonly]="!autoBidAllowed" min="{{item.price + 1}}" class="form-control" [formControl]="autoBidPrice">
+                </div>
+                <div class="col-md-2 mb-2">
+                    <button type="button" [disabled]="!autoBidAllowed" (click)="onAutoBid()" class="btn btn-primary mb-2">AutoBid</button>
+
+                </div>
             </div>
-          </form>
+        </form>
         <table *ngIf="item" class="table table-striped">
             <thead>
-              <tr>
-                <th scope="col">User</th>
-                <th scope="col">Price</th>
-              </tr>
+                <tr>
+                    <th scope="col">User</th>
+                    <th scope="col">Price</th>
+                </tr>
             </thead>
             <tbody *ngIf="item.bids != undefined">
-              <tr *ngFor="let item of item.bids.slice().reverse();">
-                <td>{{ item.userUsername }}</td>
-                <td>{{ item.bidPrice }} €</td>
-              </tr>
+                <tr *ngFor="let item of item.bids.slice().reverse();">
+                    <td>{{ item.userUsername }}</td>
+                    <td>{{ item.bidPrice }} €</td>
+                </tr>
             </tbody>
-          </table>
+        </table>
     </div>
     <div class="modal-footer">
         <button type="button" ngbAutofocus class="btn btn-outline-secondary" (click)="closeDialog()">Close</button>
