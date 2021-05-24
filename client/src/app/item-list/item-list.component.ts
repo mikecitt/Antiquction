@@ -19,7 +19,7 @@ interface Item {
   id: string;
   name: string;
   dateEnd: string;
-  price: string;
+  startPrice: string;
 }
 
 @Component({
@@ -60,8 +60,8 @@ export class ItemListComponent implements OnInit {
   }
 
   loadItems(): void {
-    this.itemService.getItems(this.filter.value, this.currentPage,  this.filter.value.split(" ")[0], this.filter.value.split(" ")[1]).subscribe(data => {
-      this.itemPage = data;        
+    this.itemService.getItems(this.filter.value, this.currentPage,  this.sortBy.value.split(" ")[0], this.sortBy.value.split(" ")[1]).subscribe(data => {
+      this.itemPage = data;
     })
   }
 

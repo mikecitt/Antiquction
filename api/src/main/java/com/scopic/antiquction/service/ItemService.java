@@ -30,11 +30,13 @@ public class ItemService {
 
     public Page<Item> findAll(String text, Integer pageNo, Integer pageSize, String sortBy, String direction) {
         Pageable paging;
+        paging = PageRequest.of(pageNo, pageSize, Sort.by(new Sort.Order(Sort.Direction.fromString(direction), sortBy).ignoreCase()).and(Sort.by("id")));
+        /*
         if(direction.equals("ASC"))
             paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy).ascending().and(Sort.by("id")));
         else
             paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy).descending().and(Sort.by("id")));
-
+        */
         Page<Item> pagedResult = repository.findByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(text, text, paging);
 
         return pagedResult;

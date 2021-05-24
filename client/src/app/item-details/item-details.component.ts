@@ -1,14 +1,15 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { FormBuilder, FormControl } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import { AuthService, ItemService, UserService } from '../service';
+import { ItemService, UserService } from '../service';
 
 class Item {
   name: string;
   description: string;
   dateEnd: string;
   price: string;
+  startPrice: string;
   autoBid: string;
   bids: Bid[];
 }
@@ -29,7 +30,7 @@ export class ItemDetailsComponent implements OnInit {
 
   bidAllowed = true;
 
-  item: Item = new Item();
+  item: Item;
 
   close = false;
 
@@ -45,6 +46,7 @@ export class ItemDetailsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.item = new Item();
     this.initItem();
   }
 
@@ -56,13 +58,13 @@ export class ItemDetailsComponent implements OnInit {
       this.item.price = result['price'];
       this.item.autoBid = result['autoBid'];
       this.item.bids = result['bids'];
+      this.item.startPrice = result['startPrice'];
       this.bidPrice.setValue(result['price'] + 1);
       this.autoBidPrice.setValue(result['autoBid']);
-      if (this.item.bids[this.item.bids.length - 1].userUsername == this.userService.currentUser.username) {
-        this.bidAllowed = false;    
-      }
-      console.log(result);
-      console.log(this.item);
+      if(this.item.bids.length > 0)
+        if (this.item.bids[this.item.bids.length - 1].userUsername == this.userService.currentUser.username) {
+          this.bidAllowed = false;    
+        }
   	})
   }
 

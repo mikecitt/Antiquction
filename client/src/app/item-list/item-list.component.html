@@ -1,21 +1,30 @@
-<div class="form-group form-inline">
-  <div class="col-2">Filter text</div> <input class="form-control ml-2" type="text" [formControl]="filter"/>
-  <div class="col-2">Sort by</div>
-  <select class="form-control" [formControl]="sortBy">
-    <option value="name ASC">Name Ascending</option>
-    <option value="name DESC">Name Descending</option>
-    <option value="price ASC">Price Ascending</option>
-    <option value="price DESC">Price Descending</option>
-    <option value="dateEnd ASC">Ending Ascending</option>
-    <option value="dateEnd DESC">Ending Descending</option>
-  </select>
+<div class="form-row ml-2 mr-2">
+  <div class="col-md-3 mb-2 mt-1">
+    <input class="form-control" type="text" placeholder="Enter text" [formControl]="filter"/>  
+  </div>
+  <div class="col-md-3 mb-2 mt-1">
+    <select class="form-control" [formControl]="sortBy">
+      <option value="name ASC">Name Ascending</option>
+      <option value="name DESC">Name Descending</option>
+      <option value="startPrice ASC">Price Ascending</option>
+      <option value="startPrice DESC">Price Descending</option>
+      <option value="dateEnd ASC">Ending Ascending</option>
+      <option value="dateEnd DESC">Ending Descending</option>
+    </select>  
+  </div>
+  <div *ngIf="itemPage" class="col-md-5 mb-2">
+    <app-pagination-bar class="centered" [hasPrev]="!itemPage.first" [hasNext]="!itemPage.last"
+    [currentPage]="currentPage" (navigatePrevEvent)="getPreviousPage()" (navigateNextEvent)="getNextPage()">
+    </app-pagination-bar>
+    <button type="button" *ngIf="isAdmin()" class="btn btn-primary ml-3" (click)="add()">Add new</button>  
+  </div>
 </div>
-<table *ngIf="itemPage" class="table table-striped">
+<table *ngIf="itemPage" class="table table-striped table-hover">
   <thead>
     <tr>
       <th scope="col">Name</th>
       <th scope="col">Ending</th>
-      <th scope="col">Price</th>
+      <th scope="col">Start Price</th>
       <th scope="col">Action</th>
     </tr>
   </thead>
@@ -23,21 +32,13 @@
     <tr *ngFor="let item of itemPage.content; index as i">
       <th>{{ item.name }}</th>
       <td>{{ item.dateEnd | timeLeft }}</td>
-      <td>{{ item.price }} €</td>
+      <td>{{ item.startPrice }} €</td>
       <td>
-        <i *ngIf="isAdmin()" (click)="bid(item.id)" style="font-size:22px; cursor: pointer;" class="fa fa-info-circle" placement="top" ngbTooltip="Details"></i>&nbsp;
-        <i *ngIf="isAdmin()" (click)="edit(item.id)" style="font-size:22px; cursor: pointer;" class="fa fa-pencil-alt" placement="top" ngbTooltip="Edit"></i>&nbsp;
-        <i *ngIf="isAdmin()" (click)="remove(item.id)" style="font-size:22px; cursor: pointer;" class="fa fa-trash" placement="top" ngbTooltip="Remove"></i>
-        <button *ngIf="!isAdmin()" type="button" class="btn btn-outline-secondary" (click)="bid(item.id)">Bid Now</button>
+        <button *ngIf="!isAdmin()" type="button" class="btn btn-outline-secondary btn-sm" (click)="bid(item.id)">Bid Now</button>
+        <i *ngIf="isAdmin()" (click)="bid(item.id)" style="font-size:18px; cursor: pointer;" class="fa fa-info-circle" placement="top" ngbTooltip="Details"></i>&nbsp;
+        <i *ngIf="isAdmin()" (click)="edit(item.id)" style="font-size:18px; cursor: pointer;" class="fa fa-pencil-alt" placement="top" ngbTooltip="Edit"></i>&nbsp;
+        <i *ngIf="isAdmin()" (click)="remove(item.id)" style="font-size:18px; cursor: pointer;" class="fa fa-trash" placement="top" ngbTooltip="Remove"></i>
       </td>
     </tr>
   </tbody>
 </table>
-<app-pagination-bar class="centered" [hasPrev]="!itemPage.first" [hasNext]="!itemPage.last"
-[currentPage]="currentPage" (navigatePrevEvent)="getPreviousPage()" (navigateNextEvent)="getNextPage()">
-</app-pagination-bar>
-<div *ngIf="isAdmin()" class="btn-group btn-group-toggle">
-  <label class="btn-primary" ngbButtonLabel>
-    <input type="checkbox" (click)="add()" ngbButton > Add new
-  </label>
-</div>

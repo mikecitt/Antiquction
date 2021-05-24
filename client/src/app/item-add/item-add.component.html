@@ -1,6 +1,6 @@
 <div class="modal-content" [class.close-animation]="close">
     <div class="modal-header">
-        <h5 class="modal-title">Edit item</h5>
+        <h5 class="modal-title">Add item</h5>
     </div>
     <div class="modal-body">
         <form [formGroup]="form">
@@ -8,33 +8,39 @@
                 <label class="col-sm-3 col-form-label">Name</label>
                 <div class="col">
                     <input type="text" class="form-control"
-                        [class.is-invalid]="form.get('name').invalid" formControlName="name">
+                        [ngClass]="{'is-valid': form.get('name').touched && form.get('name').valid, 'is-invalid': form.get('name').touched && form.get('name').invalid}"
+                        formControlName="name">
                 </div>
             </div>
             <div class="form-group row">
                 <label class="col-sm-3 col-form-label">Description</label>
                 <div class="col">
-                    <textarea class="form-control" [class.is-invalid]="form.get('description').invalid" formControlName="description"></textarea>
+                    <textarea class="form-control"
+                        [ngClass]="{'is-valid': form.get('description').touched && form.get('description').valid, 'is-invalid': form.get('description').touched && form.get('description').invalid}"
+                        formControlName="description"></textarea>
                 </div>
             </div>
             <div class="form-group row">
                 <label class="col-sm-3 col-form-label">Start Price</label>
                 <div class="col">
-                    <input type="number" min="1" class="form-control" 
-                        [class.is-invalid]="form.get('startPrice').invalid" formControlName="startPrice">
+                    <input type="number" min="1" class="form-control"
+                        [ngClass]="{'is-valid': form.get('startPrice').touched && form.get('startPrice').valid, 'is-invalid': form.get('startPrice').touched && form.get('startPrice').invalid}"
+                        formControlName="startPrice">
                 </div>
             </div>
             <div class="form-group row">
                 <label class="col-sm-3 col-form-label">Ending</label>
                 <div class="col">
-                    <input type="text" class="form-control" 
-                        [class.is-invalid]="form.get('dateEnd').invalid" formControlName="dateEnd">
+                    <input type="datetime-local" class="form-control"
+                        [ngClass]="{'is-valid': form.get('dateEnd').touched && form.get('dateEnd').valid, 'is-invalid': form.get('dateEnd').touched && form.get('dateEnd').invalid}"
+                        formControlName="dateEnd">
                 </div>
             </div>
         </form>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-outline-secondary" (click)="closeDialog()">Cancel</button>
-        <button type="button" [disabled]="form.invalid" ngbAutofocus class="btn btn-primary" (click)="addItem()">Add</button>
+        <button type="button" [disabled]="form.invalid" ngbAutofocus class="btn btn-primary"
+            (click)="addItem()">Add</button>
     </div>
 </div>

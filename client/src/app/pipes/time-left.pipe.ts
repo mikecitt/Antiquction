@@ -11,8 +11,6 @@ export class TimeLeftPipe implements PipeTransform {
             const seconds = Math.floor((+new Date(value) - +new Date()) / 1000);
             if(seconds < 0)
                 return 'Ended';
-            if (seconds < 29) // less than 30 seconds ago will show as 'Just now'
-                return 'Just now';
             const intervals = {
                 'year': 31536000,
                 'month': 2592000,

@@ -1,13 +1,4 @@
-<div>
-    <button id="pagination-button-previous"
-        mat-raised-button
-        [disabled]="!hasPrev"
-        (click)="navigatePrevious()"
-    >Previous</button>
-    <p class="page-number">{{ currentPage + 1 }}</p>
-    <button id="pagination-button-next"
-        mat-raised-button
-        [disabled]="!hasNext"
-        (click)="navigateNext()"
-    >Next</button>
-</div>
+<button [disabled]="!hasPrev" type="button" class="btn btn-outline-primary"
+    (click)="navigatePrevious()">Previous</button>
+<p class="page-number">{{ currentPage + 1 }}</p>
+<button [disabled]="!hasNext" type="button" class="btn btn-outline-primary" (click)="navigateNext()">Next</button>
