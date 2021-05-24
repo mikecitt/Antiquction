@@ -5,7 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ItemAddComponent } from '../item-add/item-add.component';
 import { ItemDetailsComponent } from '../item-details/item-details.component';
 import { ItemEditComponent } from '../item-edit/item-edit.component';
-import { ItemService, UserService } from '../service';
+import { ItemService, UserService } from '../../service';
 
 interface ItemPage {
   content: Item[];

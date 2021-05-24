@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AutobidSettingsComponent } from '../autobid-settings/autobid-settings.component';
-import { AuthService, UserService } from '../service';
+import { AuthService, UserService } from '../../service';
 
 @Component({
   selector: 'app-navigation-bar',
