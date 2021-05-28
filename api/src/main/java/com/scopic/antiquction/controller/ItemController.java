@@ -2,6 +2,7 @@ package com.scopic.antiquction.controller;
 
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Optional;
 
 import com.scopic.antiquction.dto.ItemRequest;
@@ -117,6 +118,9 @@ public class ItemController {
         Bid bid = new Bid();
         bid.setBidPrice(bidPrice);
         bid.setUser(loggedUser.get());
+
+        if(itemService.findOne(id).getDateEnd().before(new Date()))
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         
         Item biddedItem = itemService.bid(bid, id, loggedUser.get().getId());
 

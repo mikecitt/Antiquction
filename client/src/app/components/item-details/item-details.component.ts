@@ -30,6 +30,7 @@ export class ItemDetailsComponent implements OnInit {
 
   bidAllowed = true;
   autoBidAllowed = true;
+  ended = false;
 
   item: Item;
 
@@ -70,6 +71,7 @@ export class ItemDetailsComponent implements OnInit {
       if(diff < 0) {
         this.bidAllowed = false;
         this.autoBidAllowed = false;
+        this.ended = true;
       }
     })
   }

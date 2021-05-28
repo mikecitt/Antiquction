@@ -31,6 +31,8 @@ export class ItemListComponent implements OnInit {
   itemPage: ItemPage | any;
   public currentPage: number;
 
+  todayDate: Date;
+
   filter = new FormControl('');
   sortBy = new FormControl('name ASC');
 
@@ -56,6 +58,7 @@ export class ItemListComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.todayDate = new Date();
     this.loadItems();
   }
 
@@ -116,5 +119,10 @@ export class ItemListComponent implements OnInit {
   isAdmin() {
     let authority = this.userService.getRole();
       return authority === 'ROLE_ADMIN';
+  }
+
+  checkExpired(dateEndString: string) {
+    var dateEnd = new Date(dateEndString);
+    return dateEnd > this.todayDate;
   }
 }

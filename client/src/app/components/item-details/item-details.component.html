@@ -26,7 +26,7 @@
                 <p><strong>Ending:</strong> {{ item.dateEnd | timeLeft }}</p>
             </div>
         </div>
-        <form *ngIf="!isAdmin()">
+        <form *ngIf="!isAdmin() && ended == false">
             <div class="form-row">
                 <div class="col-md-2 mb-2">
                     <input type="number" [readonly]="!bidAllowed" min="{{item.price + 1}}" class="form-control" [formControl]="bidPrice">
