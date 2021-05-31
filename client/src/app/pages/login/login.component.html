@@ -1,19 +1,22 @@
-<div class="d-flex justify-content-center general ml-2 mr-2">
-	<form #loginForm="ngForm" (ngSubmit)="onSubmit()" [formGroup]="form">
-        <h1>Antiquction</h1>
-    <div class="form-group">
-      <label for="staticEmail">Username</label>
-      <input type="text" formControlName="username" required class="form-control is-in" id="staticEmail">
-      <small class="text-danger"></small> 
+<div class="d-flex justify-content-center">
+  <form #registerForm="ngForm" (ngSubmit)="onSubmit()" [formGroup]="form">
+    <h2>Login</h2>
+    <div class="form-group row">
+      <div class="col">
+        <input type="text" formControlName="username" required class="form-control" placeholder="username">
+      </div>
     </div>
-    <div class="form-group">
-      <label for="inputPassword">Password</label>
-      <input type="password" formControlName="password" required class="form-control" id="inputPassword">
+    <div class="form-group row">
+      <div class="col">
+        <input type="password" formControlName="password" class="form-control" placeholder="password">
+      </div>
     </div>
-    <div class="alert alert-danger" *ngIf="errorMessage" role="alert">
-  		{{ errorMessage }}
-		</div>
-    <button type="submit" [disabled]="!loginForm.form.valid" class="btn btn-primary mb-2">Login</button>
-    <a [routerLink]="'/register'">Register</a>
+    <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+      {{ errorMessage }}
+    </div>
+    <div class="but">
+      <button type="submit" [disabled]="!form.valid" class="btn btn-primary mb-2">Login</button>
+      <a [routerLink]="'/register'">Register</a>
+    </div>
   </form>
 </div>
