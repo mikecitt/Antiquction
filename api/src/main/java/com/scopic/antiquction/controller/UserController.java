@@ -36,6 +36,15 @@ public class UserController {
     return new ResponseEntity<>(userService.login(request), HttpStatus.OK);
     }
 
+    @PostMapping("/auth/register")
+    public ResponseEntity<Void> register(@RequestBody @Valid LoginRequest request) {
+        Boolean success = userService.register(request);
+        if(success)
+            return new ResponseEntity<>(HttpStatus.OK);
+        else
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
     @GetMapping("/auth/whoami")
     public WhoDTO user(Principal user) {
         Optional<User> optUser = this.userService.findUser(user.getName());

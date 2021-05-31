@@ -11,6 +11,7 @@ import com.scopic.antiquction.dto.AutobidSettingsDTO;
 import com.scopic.antiquction.dto.LoginRequest;
 import com.scopic.antiquction.dto.LoginResponse;
 import com.scopic.antiquction.model.User;
+import com.scopic.antiquction.model.UserType;
 import com.scopic.antiquction.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.Jwts;
@@ -27,6 +29,9 @@ import io.jsonwebtoken.SignatureAlgorithm;
 public class UserService {
     @Autowired
     private UserRepository repository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -59,4 +64,17 @@ public class UserService {
     
         return accountLoginResponse;
       }
+
+    public Boolean register(LoginRequest request) {
+        Optional<User> user = repository.findUserByUsername(request.getUsername());
+        if(!user.isPresent()) {
+            User u = new User();
+            u.setUserType(UserType.REGULAR);
+            u.setUsername(request.getUsername());
+            u.setPassword(passwordEncoder.encode(request.getPassword()));
+            User u2 = repository.save(u);
+            return u2 != null ? true : false;
+        }
+        return false;
+    }
 }
