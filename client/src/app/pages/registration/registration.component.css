@@ -1,0 +1,36 @@
+form {
+	padding: 20px;
+	border: 1px solid #cecece;
+	border-radius: 5px;
+	margin: 100px;
+}
+
+.form-group {
+	margin-bottom: 20px;
+}
+
+h2 {
+	margin-bottom: 30px;
+}
+
+
+/* experimental */
+
+*
+{
+  margin:0px auto;
+}
+
+html, body {
+  margin: 0 ;
+  padding: 0;
+  height: 100%;
+}
+
+a {
+	margin-left: 20px;
+}
+
+.but {
+	margin-top: 40px;
+}

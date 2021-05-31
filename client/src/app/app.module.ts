@@ -24,6 +24,7 @@ import { AutobidSettingsComponent } from './components/autobid-settings/autobid-
 import { UserProfileComponent } from './pages/user-profile/user-profile.component';
 import { UserItemListComponent } from './components/user-item-list/user-item-list.component';
 import { BillComponent } from './components/bill/bill.component';
+import { RegistrationComponent } from './pages/registration/registration.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { BillComponent } from './components/bill/bill.component';
     AutobidSettingsComponent,
     UserProfileComponent,
     UserItemListComponent,
-    BillComponent
+    BillComponent,
+    RegistrationComponent
   ],
   imports: [
     BrowserModule,

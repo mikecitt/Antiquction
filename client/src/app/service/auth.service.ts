@@ -9,6 +9,11 @@ import { UserService } from './user.service';
 
 const COOKIE_NAME = 'token';
 
+export interface RegistrationForm {
+	username: string;
+	password: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -50,6 +55,10 @@ export class AuthService {
           this.router.navigate(['/']);
         });
       }));
+	}
+
+  register(registration: RegistrationForm) {
+		return this.http.post<any>(`${environment.api_url}/auth/register`, registration)
 	}
 
   tokenIsPresent() {
