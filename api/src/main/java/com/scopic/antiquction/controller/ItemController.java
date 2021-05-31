@@ -3,7 +3,9 @@ package com.scopic.antiquction.controller;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.scopic.antiquction.dto.ItemRequest;
 import com.scopic.antiquction.dto.ItemResponse;
@@ -145,5 +147,16 @@ public class ItemController {
         Item i = this.itemService.addAutoBid(autoBid, id, loggedUser.get().getId());
         
         return new ResponseEntity<>(modelMapper.map(i, ItemResponse.class), HttpStatus.OK);
+    }
+
+    @GetMapping("/my")
+    @PreAuthorize("hasRole('ROLE_REGULAR')")
+    public ResponseEntity<List<ItemResponse>> getMyBiddingItems(Principal user) {
+        Optional<User> loggedUser = userService.findUser(user.getName());
+        if(loggedUser == null)
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        List<Item> items = itemService.getUserBiddingItems(loggedUser.get().getId());
+        List<ItemResponse> itemResponses = items.stream().map(item -> modelMapper.map(item, ItemResponse.class)).collect(Collectors.toList());
+        return new ResponseEntity<>(itemResponses, HttpStatus.OK);
     }
 }

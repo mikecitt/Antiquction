@@ -38,6 +38,11 @@ public class ItemService {
         return pagedResult;
     }
 
+    public List<Item> getUserBiddingItems(Long userId) {
+        User u = userRepository.getOne(userId);
+        return repository.findByBidsUserOrderByDateEndDesc(u);
+    }
+
     public Item findOne(Long id) {
         return repository.findById(id).orElseGet(null);
     }

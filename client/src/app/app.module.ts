@@ -21,6 +21,8 @@ import { ItemAddComponent } from './components/item-add/item-add.component';
 import { TimeLeftPipe } from './pipes/time-left.pipe';
 import { PaginationBarComponent } from './components/pagination-bar/pagination-bar.component';
 import { AutobidSettingsComponent } from './components/autobid-settings/autobid-settings.component';
+import { UserProfileComponent } from './pages/user-profile/user-profile.component';
+import { UserItemListComponent } from './components/user-item-list/user-item-list.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +36,9 @@ import { AutobidSettingsComponent } from './components/autobid-settings/autobid-
     ItemAddComponent,
     TimeLeftPipe,
     PaginationBarComponent,
-    AutobidSettingsComponent
+    AutobidSettingsComponent,
+    UserProfileComponent,
+    UserItemListComponent
   ],
   imports: [
     BrowserModule,

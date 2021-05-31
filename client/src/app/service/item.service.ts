@@ -17,6 +17,10 @@ export class ItemService {
     return this.http.get<any[]>(`${environment.api_url}/items/?text=${text}&pageNo=${currentPage}&sortBy=${sortBy}&direction=${direction}`)
   }
 
+  getMyBiddingItems() {
+    return this.http.get<any[]>(`${environment.api_url}/items/my`)
+  }
+
   getItem(id: number) {
     return this.http.get<any[]>(`${environment.api_url}/items/${id}/`)
   }
