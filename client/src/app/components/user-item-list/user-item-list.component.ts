@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ItemService, UserService } from 'src/app/service';
+import { BillComponent } from '../bill/bill.component';
 
 interface Item {
   id: string;
@@ -21,7 +23,8 @@ export class UserItemListComponent implements OnInit {
 
   constructor(
     private itemService: ItemService,
-    private userService: UserService
+    private userService: UserService,
+    private modalService: NgbModal
   ) { }
 
   ngOnInit(): void {
@@ -32,7 +35,6 @@ export class UserItemListComponent implements OnInit {
     this.todayDate = new Date();
     this.itemService.getMyBiddingItems().subscribe(data => {
       this.items = data;
-      console.log(this.items);
     })
   }
 
@@ -50,6 +52,15 @@ export class UserItemListComponent implements OnInit {
       else
         return "Lost";
     }
+  }
+
+  bill(id) {
+    const modalRef = this.modalService.open(BillComponent);
+    modalRef.componentInstance.id = id;
+    modalRef.result.then((data) => {
+    }, (reason) => {
+      this.loadItems();
+    });
   }
 
 }

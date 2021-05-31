@@ -21,6 +21,10 @@ export class ItemService {
     return this.http.get<any[]>(`${environment.api_url}/items/my`)
   }
 
+  getBill(id: number) {
+    return this.http.get<any[]>(`${environment.api_url}/items/${id}/bill`)
+  }
+
   getItem(id: number) {
     return this.http.get<any[]>(`${environment.api_url}/items/${id}/`)
   }

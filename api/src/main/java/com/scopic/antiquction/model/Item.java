@@ -41,4 +41,11 @@ public class Item {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AutoBid> autoBids;
+
+    public Bid getLastBid() {
+        if(bids.size() == 0)
+            return null;
+        else
+            return bids.get(bids.size() - 1);
+    }
 }

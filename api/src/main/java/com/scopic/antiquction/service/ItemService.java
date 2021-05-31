@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import com.scopic.antiquction.dto.BillResponse;
 import com.scopic.antiquction.model.AutoBid;
 import com.scopic.antiquction.model.Bid;
 import com.scopic.antiquction.model.Item;
@@ -185,5 +186,19 @@ public class ItemService {
         }
 
         return bidded ? checkAutoBid(item) : item;
+    }
+
+    public BillResponse getBill(Long userId, Long itemId) {
+        Optional<User> u = userRepository.findById(userId);
+        if(!u.isPresent())
+            return null;
+        Optional<Item> i = repository.findById(itemId);
+        if(!i.isPresent())
+            return null;
+        
+        if(!i.get().getLastBid().getUser().equals(u.get()))
+            return null;
+        
+        return new BillResponse(i.get().getName(), u.get().getUsername(), i.get().getLastBid().getBidPrice());
     }
 }

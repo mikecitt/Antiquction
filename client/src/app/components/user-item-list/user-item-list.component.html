@@ -13,7 +13,7 @@
             <td>{{ item.dateEnd | timeLeft }}</td>
             <td>{{ getState(item) }}</td>
             <td>
-                <button *ngIf="getState(item) == 'Won'" type="button" class="btn btn-primary btn-sm">Bill</button>
+                <button *ngIf="getState(item) == 'Won'" (click)="bill(item.id)" type="button" class="btn btn-primary btn-sm">Bill</button>
             </td>
         </tr>
     </tbody>

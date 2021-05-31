@@ -23,6 +23,7 @@ import { PaginationBarComponent } from './components/pagination-bar/pagination-b
 import { AutobidSettingsComponent } from './components/autobid-settings/autobid-settings.component';
 import { UserProfileComponent } from './pages/user-profile/user-profile.component';
 import { UserItemListComponent } from './components/user-item-list/user-item-list.component';
+import { BillComponent } from './components/bill/bill.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { UserItemListComponent } from './components/user-item-list/user-item-lis
     PaginationBarComponent,
     AutobidSettingsComponent,
     UserProfileComponent,
-    UserItemListComponent
+    UserItemListComponent,
+    BillComponent
   ],
   imports: [
     BrowserModule,

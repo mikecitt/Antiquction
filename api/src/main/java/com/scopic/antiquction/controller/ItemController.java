@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.scopic.antiquction.dto.BillResponse;
 import com.scopic.antiquction.dto.ItemRequest;
 import com.scopic.antiquction.dto.ItemResponse;
 import com.scopic.antiquction.model.AutoBid;
@@ -158,5 +159,22 @@ public class ItemController {
         List<Item> items = itemService.getUserBiddingItems(loggedUser.get().getId());
         List<ItemResponse> itemResponses = items.stream().map(item -> modelMapper.map(item, ItemResponse.class)).collect(Collectors.toList());
         return new ResponseEntity<>(itemResponses, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}/bill")
+    @PreAuthorize("hasRole('ROLE_REGULAR')")
+    public ResponseEntity<BillResponse> getBill(@PathVariable Long id, Principal user) {
+        Optional<User> loggedUser = userService.findUser(user.getName());
+        if(loggedUser == null)
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        if(itemService.findOne(id) == null)
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        BillResponse response = itemService.getBill(id, loggedUser.get().getId());
+        if(response == null)
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        else
+            return new ResponseEntity<>(response, HttpStatus.OK);
+
     }
 }
