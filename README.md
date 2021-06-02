@@ -14,8 +14,9 @@
  - Visual Studio Code
 
 #### Using
-
-    run AntiquctionApplication
+    mvn clean install
+    mvn -Djasypt.encryptor.password=SECRET_KEY spring-boot:run
+* SECREY_KEY should be replaced with company name in lowercase -> s****c
 
 ## Client
 #### Used technologies:
@@ -27,3 +28,6 @@
 
     npm install // to install dependencies
     ng serve    // start
+    
+## Notes
+Email notifications are sending to antiquction@gmailnator.com which you can access at this link: https://www.gmailnator.com/inbox/#antiquction@gmailnator.com
