@@ -38,9 +38,9 @@
                 <div class="col-md-2 mb-2">
                     <input type="number" [readonly]="!autoBidAllowed" min="{{item.price + 1}}" class="form-control" [formControl]="autoBidPrice">
                 </div>
-                <div class="col-md-2 mb-2">
+                <div class="col-md-4 mb-2">
                     <button type="button" [disabled]="!autoBidAllowed" (click)="onAutoBid()" class="btn btn-primary mb-2">AutoBid</button>
-
+                    <button type="button" [disabled]="autoBidAllowed" (click)="cancelAutoBid()" class="btn btn-danger ml-1 mb-2">X</button>
                 </div>
             </div>
         </form>

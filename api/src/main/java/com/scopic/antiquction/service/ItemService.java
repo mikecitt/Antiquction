@@ -99,6 +99,27 @@ public class ItemService {
         return repository.save(item);
     }
 
+    public Item cancelAutoBid(Long itemId, Long userId) {
+        Optional<Item> i = repository.findById(itemId);
+        if(!i.isPresent())
+            return null;
+        Item item = i.get();
+
+        Optional<User> u = userRepository.findById(userId);
+        if(!u.isPresent())
+            return null;
+        User user = u.get();
+
+        for(AutoBid a : item.getAutoBids()) {
+            if(a.getUser() == user) {
+                item.getAutoBids().remove(a);
+                return repository.save(item);
+            }
+        }
+
+        return item;
+    }
+
     public Item addAutoBid(AutoBid autoBid, Long itemId, Long userId) {
         Optional<Item> i = repository.findById(itemId);
         if(!i.isPresent())

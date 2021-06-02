@@ -143,6 +143,23 @@ public class ItemController {
         return new ResponseEntity<>(itemResponse, HttpStatus.OK);
     }
 
+    @PostMapping("/{id}/autobid/cancel")
+    @PreAuthorize("hasRole('ROLE_REGULAR')")
+    public ResponseEntity<ItemResponse> autobidItemCancel(@PathVariable Long id, Principal user) {
+        Optional<User> loggedUser = userService.findUser(user.getName());
+        if(loggedUser == null)
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        if(itemService.findOne(id) == null)
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        Item i = this.itemService.cancelAutoBid(id, loggedUser.get().getId());
+        ItemResponse itemResponse = modelMapper.map(i, ItemResponse.class);
+        if(itemResponse.getBids().size() > 0)
+            itemResponse.setPrice(itemResponse.getBids().get(itemResponse.getBids().size() - 1).getBidPrice());
+
+        return new ResponseEntity<>(itemResponse, HttpStatus.OK);
+    }    
+
     @PostMapping("/{id}/autobid")
     @PreAuthorize("hasRole('ROLE_REGULAR')")
     public ResponseEntity<ItemResponse> autobidItem(@PathVariable Long id, @RequestParam Integer maxBidPrice, Principal user) {

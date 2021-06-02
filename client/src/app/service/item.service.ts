@@ -48,4 +48,8 @@ export class ItemService {
   autoBidItem(id: number, autoBidPrice: number) {
   	return this.http.post<any>(`${environment.api_url}/items/${id}/autobid?maxBidPrice=${autoBidPrice}`, httpOptions)
   }
+
+  autoBidItemCancel(id: number) {
+  	return this.http.post<any>(`${environment.api_url}/items/${id}/autobid/cancel`, httpOptions)
+  }
 }

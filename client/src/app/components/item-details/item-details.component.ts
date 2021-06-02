@@ -94,6 +94,8 @@ export class ItemDetailsComponent implements OnInit {
       this.item.startPrice = result['startPrice'];
       this.bidPrice.setValue(result['price'] + 1);
       this.autoBidPrice.setValue(result['autoBid']);
+      if(this.item.autoBid != null)
+        this.autoBidAllowed = false;
       if(this.item.bids.length > 0)
         if (this.item.bids[this.item.bids.length - 1].userUsername == this.userService.currentUser.username) {
           this.bidAllowed = false;    
@@ -124,6 +126,16 @@ export class ItemDetailsComponent implements OnInit {
       this.autoBidPrice.setValue("");
     }, err => {
       this.toastr.error('Problem with autobidding.', 'Error');
+    });
+  }
+
+  cancelAutoBid() {
+    this.itemService.autoBidItemCancel(this.id).subscribe(data => {
+      this.toastr.success('AutoBid successfuly removed!', 'Success');
+      this.initItem();
+      this.autoBidPrice.setValue("");
+    }, err => {
+      this.toastr.error('Problem with removing autobid.', 'Error');
     });
   }
 
