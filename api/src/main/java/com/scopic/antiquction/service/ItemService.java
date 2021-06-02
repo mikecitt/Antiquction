@@ -171,12 +171,12 @@ public class ItemService {
             a.getUser().setReservedAutoBid(lastReserved + diff);
             if(notificationAutoBid != null) {
                 if( (float) lastReserved / (float) maxAutoBid < (float) notificationAutoBid / 100 && ((float) lastReserved + (float) diff) / (float) maxAutoBid >= (float) notificationAutoBid / 100) {
-                    emailService.sendMessage("mikecitt@gmail.com", "Antiquction AutoBid", "You have reached " + notificationAutoBid + "% of maximum bidding ammount.");
+                    emailService.sendMessage("antiquction@gmailnator.com", "Antiquction AutoBid", "You have reached " + notificationAutoBid + "% of maximum bidding ammount.");
                 }
             }
             return a;
         }
-        emailService.sendMessage("mikecitt@gmail.com", "Antiquction AutoBid", "Your bidding process is stopped. Reached maximum ammount.");
+        emailService.sendMessage("antiquction@gmailnator.com", "Antiquction AutoBid", "Your bidding process is stopped. Reached maximum ammount.");
         return null;
     }
 

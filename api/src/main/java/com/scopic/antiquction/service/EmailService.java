@@ -43,7 +43,7 @@ public class EmailService {
                 i.setAwarded(true);
                 if(i.getLastBid() != null) {
                     System.out.println("Sending mail to " + i.getLastBid().getUser().getUsername() + " for winning item " + i.getName());
-                    //sendMessage("antiquction@gmailnator.com", "Item (" + i.getName() + ") won", "Hello " + i.getLastBid().getUser().getUsername() + "!\n\nHere is your bill: \nItem name: " + i.getName() + "\nItem description: " + i.getDescription() + "\nStart price: " + i.getStartPrice() + " €\n" + "Bid price: " + i.getLastBid().getBidPrice() + " €");
+                    sendMessage("antiquction@gmailnator.com", "Item (" + i.getName() + ") won", "Hello " + i.getLastBid().getUser().getUsername() + "!\n\nHere is your bill: \nItem name: " + i.getName() + "\nItem description: " + i.getDescription() + "\nStart price: " + i.getStartPrice() + " €\n" + "Bid price: " + i.getLastBid().getBidPrice() + " €");
                 }
                 changed = true;
             }
@@ -64,7 +64,7 @@ public class EmailService {
 
         for(User u : toSend) {
             System.out.println("Sending mail to " + u.getUsername() + " about new highest bid (" + item.getLastBid().getBidPrice() + ") on item " + item.getName() + " made by user: " + item.getLastBid().getUser().getUsername());
-            //sendMessage("antiquction@gmailnator.com", "New bid", "There has been new highest bid on item: " + item.getName() + " made by user " + item.getLastBid().getUser().getUsername());
+            sendMessage("antiquction@gmailnator.com", "New bid", "There has been new highest bid on item: " + item.getName() + " made by user " + item.getLastBid().getUser().getUsername());
         }
     }
 }
