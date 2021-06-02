@@ -23,19 +23,25 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping
+@Api(value = "ItemController", description = "Operations for authentication and user settings.")
 public class UserController {
     @Autowired
     private UserService userService;
 
 
+    @ApiOperation(value = "Log in as user or admin")
     @PostMapping("/auth/login")
     public ResponseEntity<LoginResponse> login(@RequestBody @Valid LoginRequest request) {
     return new ResponseEntity<>(userService.login(request), HttpStatus.OK);
     }
 
+    @ApiOperation(value = "Register new user")
     @PostMapping("/auth/register")
     public ResponseEntity<Void> register(@RequestBody @Valid LoginRequest request) {
         Boolean success = userService.register(request);
@@ -45,6 +51,7 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
+    @ApiOperation(value = "Get logged user details by passed token")
     @GetMapping("/auth/whoami")
     public WhoDTO user(Principal user) {
         Optional<User> optUser = this.userService.findUser(user.getName());
@@ -53,7 +60,7 @@ public class UserController {
         return new WhoDTO(optUser.get());
     }
 
-
+    @ApiOperation(value = "Save new user settings for bidding")
     @PostMapping("/settings")
     @PreAuthorize("hasRole('ROLE_REGULAR')")
     public ResponseEntity<Void> setupAutobid(@RequestBody AutobidSettingsDTO settings, Principal user) {
@@ -64,6 +71,7 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @ApiOperation(value = "View user settings for bidding")
     @GetMapping("/settings")
     @PreAuthorize("hasRole('ROLE_REGULAR')")
     public ResponseEntity<AutobidSettingsDTO> getAutobidSettings(Principal user) {

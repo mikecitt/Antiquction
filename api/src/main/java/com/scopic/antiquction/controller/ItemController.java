@@ -35,9 +35,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/items")
+@Api(value = "ItemController", description = "Operations pertaining to items and biddings.")
 public class ItemController {
     @Autowired
     private ItemService itemService;
@@ -51,6 +55,7 @@ public class ItemController {
     @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;
 
+    @ApiOperation(value = "View a list of all items")
     @GetMapping
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_REGULAR')")
     public ResponseEntity<Page<ItemResponse>> getItems(
@@ -70,6 +75,7 @@ public class ItemController {
         return new ResponseEntity<>(itemsDTO, HttpStatus.OK);
     }
 
+    @ApiOperation(value = "View a details about specific item")
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_REGULAR')")
     public ResponseEntity<ItemResponse> getItem(@PathVariable Long id, Principal user) {
@@ -88,6 +94,7 @@ public class ItemController {
         return new ResponseEntity<>(itemResponse, HttpStatus.OK);
     }
 
+    @ApiOperation(value = "Add new item")
     @PostMapping
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<ItemResponse> addItem(@RequestBody ItemRequest itemDTO) {
@@ -97,6 +104,7 @@ public class ItemController {
         return new ResponseEntity<>(modelMapper.map(i, ItemResponse.class), HttpStatus.OK);
     }
 
+    @ApiOperation(value = "Update existing item")
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<ItemResponse> updateItem(@RequestBody ItemRequest itemDTO, @PathVariable Long id) {
@@ -115,6 +123,7 @@ public class ItemController {
         return new ResponseEntity<>(modelMapper.map(i, ItemResponse.class), HttpStatus.OK);
     }
 
+    @ApiOperation(value = "Delete existing item")
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Void> deleteItem(@PathVariable Long id) {
@@ -122,6 +131,7 @@ public class ItemController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @ApiOperation(value = "Bid specific item")
     @PostMapping("/{id}/bid")
     @PreAuthorize("hasRole('ROLE_REGULAR')")
     public ResponseEntity<ItemResponse> bidItem(@PathVariable Long id, @RequestParam Integer bidPrice, Principal user) {
@@ -151,7 +161,8 @@ public class ItemController {
         return new ResponseEntity<>(itemResponse, HttpStatus.OK);
     }
 
-    @PostMapping("/{id}/autobid/cancel")
+    @ApiOperation(value = "Cancel autobid")
+    @DeleteMapping("/{id}/autobid")
     @PreAuthorize("hasRole('ROLE_REGULAR')")
     public ResponseEntity<ItemResponse> autobidItemCancel(@PathVariable Long id, Principal user) {
         Optional<User> loggedUser = userService.findUser(user.getName());
@@ -168,6 +179,7 @@ public class ItemController {
         return new ResponseEntity<>(itemResponse, HttpStatus.OK);
     }    
 
+    @ApiOperation(value = "Add autobid")
     @PostMapping("/{id}/autobid")
     @PreAuthorize("hasRole('ROLE_REGULAR')")
     public ResponseEntity<ItemResponse> autobidItem(@PathVariable Long id, @RequestParam Integer maxBidPrice, Principal user) {
@@ -190,6 +202,7 @@ public class ItemController {
         return new ResponseEntity<>(itemResponse, HttpStatus.OK);
     }
 
+    @ApiOperation(value = "Get all items user bidded in past")
     @GetMapping("/my")
     @PreAuthorize("hasRole('ROLE_REGULAR')")
     public ResponseEntity<List<ItemResponse>> getMyBiddingItems(Principal user) {
@@ -201,6 +214,7 @@ public class ItemController {
         return new ResponseEntity<>(itemResponses, HttpStatus.OK);
     }
 
+    @ApiOperation(value = "Get bill for won item")
     @GetMapping("/{id}/bill")
     @PreAuthorize("hasRole('ROLE_REGULAR')")
     public ResponseEntity<BillResponse> getBill(@PathVariable Long id, Principal user) {

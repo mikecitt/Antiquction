@@ -50,6 +50,6 @@ export class ItemService {
   }
 
   autoBidItemCancel(id: number) {
-  	return this.http.post<any>(`${environment.api_url}/items/${id}/autobid/cancel`, httpOptions)
+  	return this.http.delete<any>(`${environment.api_url}/items/${id}/autobid`, httpOptions)
   }
 }
