@@ -96,6 +96,8 @@ public class ItemService {
         item.getBids().add(bid);
         item = checkAutoBid(item);
 
+        emailService.sendBidNotification(item);
+
         return repository.save(item);
     }
 
@@ -143,7 +145,11 @@ public class ItemService {
         if(!done)
             item.getAutoBids().add(autoBid);
             
+        Integer bidsNumber = item.getBids().size();
         item = checkAutoBid(item);
+
+        if(item.getBids().size() > bidsNumber) // there was new bid
+            emailService.sendBidNotification(item);
 
         return repository.save(item);
     }
