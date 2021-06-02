@@ -15,5 +15,6 @@ import org.springframework.stereotype.Repository;
 public interface ItemRepository extends JpaRepository<Item, Long> {
     Page<Item> findByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(String name, String description, Pageable pageable);
     List<Item> findByBidsUserOrderByDateEndDesc(User user);
+    List<Item> findByAwarded(Boolean awarded);
     Optional<Item> findById(Long id);
 }

@@ -37,7 +37,7 @@ export class ItemAddComponent implements OnInit {
 
   addItem() {
     let payload = this.form.getRawValue();
-
+    payload.dateEnd = Date.parse(this.form.controls['dateEnd'].value);
     this.service.addItem(payload).subscribe(data => {
       this.toastr.success('Item successfuly added!', 'Success');
       this.close = true;
