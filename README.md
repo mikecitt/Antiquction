@@ -18,6 +18,9 @@
     mvn -Djasypt.encryptor.password=SECRET_KEY spring-boot:run
 * SECREY_KEY should be replaced with company name in lowercase -> s****c
 
+## Documenation
+#### It is available on server on address: http://localhost:8080/swagger-ui.html
+
 ## Client
 #### Used technologies:
 
