@@ -63,11 +63,9 @@ export class ItemDetailsComponent implements OnInit {
   }
 
   initItemFromSocket() {
-    this.autoBidAllowed = true;
     this.bidAllowed = true;
     this.ended = false;
     this.bidPrice.setValue(this.item.price + 1);
-    this.autoBidPrice.setValue(this.item.autoBid);
     if(this.item.bids.length > 0)
       if (this.item.bids[this.item.bids.length - 1].userUsername == this.userService.currentUser.username) {
         this.bidAllowed = false;    

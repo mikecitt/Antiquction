@@ -102,6 +102,14 @@ public class ItemController {
     public ResponseEntity<ItemResponse> updateItem(@RequestBody ItemRequest itemDTO, @PathVariable Long id) {
         Item item = modelMapper.map(itemDTO, Item.class);
         Item i = itemService.update(id, item);
+
+        ItemResponse itemResponse = modelMapper.map(i, ItemResponse.class);
+        if(itemResponse.getBids().size() > 0)
+            itemResponse.setPrice(itemResponse.getBids().get(itemResponse.getBids().size() - 1).getBidPrice());
+
+        this.simpMessagingTemplate.convertAndSend("/socket-publisher/" + id, itemResponse);
+
+
         if(i == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(modelMapper.map(i, ItemResponse.class), HttpStatus.OK);
