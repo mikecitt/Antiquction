@@ -51,6 +51,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
   protected void configure(HttpSecurity http) throws Exception {
     http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
         .antMatchers(HttpMethod.POST, "/auth/**").permitAll()
+        .antMatchers("/socket/**").permitAll() // TODO: fix permissions
         .antMatchers("/h2-console/**").permitAll()
         .anyRequest().authenticated().and()
         .addFilterBefore(new TokenAuthenticationFilter(accountDetailsService), BasicAuthenticationFilter.class).cors()

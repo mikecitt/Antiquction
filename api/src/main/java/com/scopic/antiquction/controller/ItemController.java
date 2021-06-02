@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -46,6 +47,9 @@ public class ItemController {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private SimpMessagingTemplate simpMessagingTemplate;
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_REGULAR')")
@@ -130,7 +134,13 @@ public class ItemController {
         if(biddedItem == null)
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         
-        return new ResponseEntity<>(modelMapper.map(biddedItem, ItemResponse.class), HttpStatus.OK);
+        ItemResponse itemResponse = modelMapper.map(biddedItem, ItemResponse.class);
+        if(itemResponse.getBids().size() > 0)
+            itemResponse.setPrice(itemResponse.getBids().get(itemResponse.getBids().size() - 1).getBidPrice());
+
+        this.simpMessagingTemplate.convertAndSend("/socket-publisher/" + id, itemResponse);
+        
+        return new ResponseEntity<>(itemResponse, HttpStatus.OK);
     }
 
     @PostMapping("/{id}/autobid")
@@ -146,8 +156,13 @@ public class ItemController {
         autoBid.setUser(loggedUser.get());
 
         Item i = this.itemService.addAutoBid(autoBid, id, loggedUser.get().getId());
-        
-        return new ResponseEntity<>(modelMapper.map(i, ItemResponse.class), HttpStatus.OK);
+        ItemResponse itemResponse = modelMapper.map(i, ItemResponse.class);
+        if(itemResponse.getBids().size() > 0)
+            itemResponse.setPrice(itemResponse.getBids().get(itemResponse.getBids().size() - 1).getBidPrice());
+
+        this.simpMessagingTemplate.convertAndSend("/socket-publisher/" + id, itemResponse);
+
+        return new ResponseEntity<>(itemResponse, HttpStatus.OK);
     }
 
     @GetMapping("/my")

@@ -123,6 +123,7 @@ public class ItemService {
             item.getAutoBids().add(autoBid);
             
         item = checkAutoBid(item);
+
         return repository.save(item);
     }
 
